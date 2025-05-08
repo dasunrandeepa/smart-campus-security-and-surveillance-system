@@ -3,11 +3,6 @@ import json
 from supabase import create_client, Client
 from supabase_utils import check_authorization
 
-# Initialize Supabase client
-url = "https://zaflkozecixjuxyuscve.supabase.co"  
-key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphZmxrb3plY2l4anV4eXVzY3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1MDg4OTYsImV4cCI6MjA2MjA4NDg5Nn0.11lgk1syAG8ujRbY5x6oLlGrVELCr9XcnOU2E3FcQXE"
-supabase: Client = create_client(url, key)
-
 def consume_vehicle_detected():
     connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
     channel = connection.channel()
