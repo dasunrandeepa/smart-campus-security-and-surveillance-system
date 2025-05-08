@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Dashboard</title>
+</head>
+<body>
+    <h1>Unauthorized Vehicles</h1>
+    <ul>
+        {% for vehicle in vehicles %}
+            <li>
+                Plate: {{ vehicle.plate_number }} | 
+                <form action="/approve/{{ vehicle.plate_number }}" method="post" style="display:inline;">
+                    <button type="submit">Allow</button>
+                </form>
+            </li>
+        {% else %}
+            <li>No pending approvals</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

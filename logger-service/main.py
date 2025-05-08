@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 import threading
-from rabbitmq_listener import consume_authorization_result
+from rabbitmq_listener import consume_vehicle_authorized
 
 app = FastAPI()
 
 @app.on_event("startup")
 def startup_event():
-    thread = threading.Thread(target=consume_authorization_result)
+    thread = threading.Thread(target=consume_vehicle_authorized)
     thread.daemon = True
     thread.start()
 
