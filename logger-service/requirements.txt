@@ -1,5 +1,5 @@
 fastapi
-supabase
+uvicorn
 pika
-jinja2
+supabase
 dotenv

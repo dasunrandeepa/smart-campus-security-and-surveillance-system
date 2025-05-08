@@ -1,9 +1,13 @@
 from supabase import create_client, Client
+import os
+from dotenv import load_dotenv
 
-url = "https://zaflkozecixjuxyuscve.supabase.co"  # Your Supabase URL
-key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphZmxrb3plY2l4anV4eXVzY3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1MDg4OTYsImV4cCI6MjA2MjA4NDg5Nn0.11lgk1syAG8ujRbY5x6oLlGrVELCr9XcnOU2E3FcQXE"
+load_dotenv()
 
-supabase: Client = create_client(url, key)
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def log_vehicle(plate_number: str, status: str, security_clear: bool):
     try:
