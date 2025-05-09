@@ -12,7 +12,8 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Cctv, Car, AlertTriangle, Search, Users } from "lucide-react";
+import { Cctv, Car, AlertTriangle, Search, Users, ListCheck } from "lucide-react";
+
 
 type SidebarItem = {
   icon: React.ElementType;
@@ -46,6 +47,12 @@ export function DashboardSidebar({
       label: "Vehicle Access",
       active: activeSection === "vehicle",
       onClick: () => onSectionChange("vehicle"),
+    },
+    {
+      icon: ListCheck,
+      label: "Visitor Pre-Auth",
+      active: activeSection === "preauth",
+      onClick: () => onSectionChange("preauth"),
     },
     {
       icon: Search,

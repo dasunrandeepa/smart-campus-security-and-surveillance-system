@@ -5,6 +5,7 @@ import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { CctvMonitoring } from "@/components/CctvMonitoring";
 import { AlertsPanel } from "@/components/AlertsPanel";
 import { VehicleAccess } from "@/components/VehicleAccess";
+import { VisitorPreAuth } from "@/components/VisitorPreAuth";
 import { SearchLogs } from "@/components/SearchLogs";
 import { PersonnelSection } from "@/components/PersonnelSection";
 
@@ -19,6 +20,8 @@ const Index = () => {
         return <AlertsPanel />;
       case "vehicle":
         return <VehicleAccess />;
+      case "preauth":
+        return <VisitorPreAuth />;
       case "search":
         return <SearchLogs />;
       case "personnel":
