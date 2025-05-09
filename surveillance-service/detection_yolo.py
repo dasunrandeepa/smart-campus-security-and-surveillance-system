@@ -8,7 +8,7 @@ def run_yolo_detection():
     cap = cv2.VideoCapture(0)
 
     last_alert_time = 0
-    cooldown = 15  # seconds
+    cooldown = 15  
 
     while True:
         ret, frame = cap.read()
