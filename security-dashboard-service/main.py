@@ -1,14 +1,17 @@
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 import threading
 from manual_approvals import get_all_pending, remove_vehicle
 from rabbitmq import consume_manual_approvals, send_manual_approval
 from guest_pre_auth import insert_guest_vehicle
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+
+
 
 @app.on_event("startup")
 def start_consumer():
@@ -20,6 +23,10 @@ def start_consumer():
 def dashboard(request: Request):
     vehicles = get_all_pending()
     return templates.TemplateResponse("dashboard.html", {"request": request, "vehicles": vehicles})
+
+@app.get("/api/vehicles/pending")
+def get_pending_vehicles():
+    return JSONResponse(content=get_all_pending())
 
 @app.post("/approve/{plate_number}")
 def approve_vehicle(plate_number: str):
