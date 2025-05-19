@@ -63,7 +63,7 @@ export function VisitorPreAuth() {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch("http://localhost:8003/api/events");
+      const response = await fetch("http://localhost:8203/api/events");
       if (!response.ok) throw new Error("Failed to fetch events");
       const data = await response.json();
       setEvents(data);
@@ -78,7 +78,7 @@ export function VisitorPreAuth() {
 
   const fetchEventVehicles = async (eventId: string) => {
     try {
-      const response = await fetch(`http://localhost:8003/api/events/${eventId}/vehicles`);
+      const response = await fetch(`http://localhost:8203/api/events/${eventId}/vehicles`);
       if (!response.ok) throw new Error("Failed to fetch vehicles");
       const data = await response.json();
       setVehicles(data);
@@ -96,7 +96,7 @@ export function VisitorPreAuth() {
       formData.append("start_time", newEvent.start_time);
       formData.append("end_time", newEvent.end_time);
 
-      const response = await fetch("http://localhost:8003/api/events", {
+      const response = await fetch("http://localhost:8203/api/events", {
         method: "POST",
         body: formData,
       });
@@ -128,7 +128,7 @@ export function VisitorPreAuth() {
       formData.append("reason", newVehicle.reason);
       formData.append("added_by", newVehicle.added_by);
 
-      const response = await fetch(`http://localhost:8003/api/events/${selectedEvent}/vehicles`, {
+      const response = await fetch(`http://localhost:8203/api/events/${selectedEvent}/vehicles`, {
         method: "POST",
         body: formData,
       });
@@ -155,7 +155,7 @@ export function VisitorPreAuth() {
 
     try {
       const response = await fetch(
-        `http://localhost:8003/api/events/${selectedEvent}/vehicles/${plateNumber}`,
+        `http://localhost:8203/api/events/${selectedEvent}/vehicles/${plateNumber}`,
         {
           method: "DELETE",
         }
@@ -176,7 +176,7 @@ export function VisitorPreAuth() {
       const formData = new FormData();
       formData.append("status", newStatus);
 
-      const response = await fetch(`http://localhost:8003/api/events/${eventId}/status`, {
+      const response = await fetch(`http://localhost:8203/api/events/${eventId}/status`, {
         method: "PUT",
         body: formData,
       });

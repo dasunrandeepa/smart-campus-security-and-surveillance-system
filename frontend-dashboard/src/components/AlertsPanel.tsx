@@ -25,7 +25,7 @@ export function AlertsPanel() {
 
   const fetchAlerts = async () => {
     try {
-      const response = await fetch('http://localhost:8002/api/alerts');
+      const response = await fetch('http://localhost:8202/api/alerts');
       const data = await response.json();
       setAlerts(data);
     } catch (error) {
@@ -44,7 +44,7 @@ export function AlertsPanel() {
 
   const handleDispatchTeam = async (alertId: string) => {
     try {
-      const response = await fetch(`http://localhost:8002/api/alerts/${alertId}`, {
+      const response = await fetch(`http://localhost:8202/api/alerts/${alertId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export function AlertsPanel() {
 
   const handleResolveAlert = async (alertId: string) => {
     try {
-      const response = await fetch(`http://localhost:8002/api/alerts/${alertId}`, {
+      const response = await fetch(`http://localhost:8202/api/alerts/${alertId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

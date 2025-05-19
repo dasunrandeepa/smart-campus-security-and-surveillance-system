@@ -26,7 +26,7 @@ export function SearchLogs() {
 
   const fetchLogs = async () => {
     try {
-      const response = await fetch("http://localhost:8002/api/vehicles/logs");
+      const response = await fetch("http://localhost:8202/api/vehicles/logs");
       if (!response.ok) {
         throw new Error("Failed to fetch logs");
       }

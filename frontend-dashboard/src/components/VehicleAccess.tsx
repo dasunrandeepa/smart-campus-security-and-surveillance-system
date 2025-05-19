@@ -17,7 +17,7 @@ export function VehicleAccess() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8003/api/vehicles/pending")
+    fetch("http://localhost:8203/api/vehicles/pending")
       .then((res) => res.json())
       .then((data) => {
         setVehicles(data);
@@ -33,7 +33,7 @@ export function VehicleAccess() {
 
   const handleApprove = async (plateNumber: string) => {
     try {
-      const response = await fetch(`http://localhost:8003/approve/${plateNumber}`, {
+      const response = await fetch(`http://localhost:8203/approve/${plateNumber}`, {
         method: 'POST',
         redirect: 'follow'
       });

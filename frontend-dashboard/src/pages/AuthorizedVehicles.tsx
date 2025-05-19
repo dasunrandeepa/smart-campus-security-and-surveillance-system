@@ -24,7 +24,7 @@ interface AuthorizedVehicle {
   contact_info: string;
 }
 
-const API_BASE_URL = 'http://localhost:8001';
+const API_BASE_URL = 'http://localhost:8201';
 
 export default function AuthorizedVehicles() {
   const [vehicles, setVehicles] = useState<AuthorizedVehicle[]>([]);

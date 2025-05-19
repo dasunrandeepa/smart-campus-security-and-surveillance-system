@@ -41,7 +41,7 @@ def validate_plate(text):
 
 def send_plate_number(plate_number):
     """Send detected plate number to the endpoint"""
-    url = "http://localhost:8000/detect"
+    url = "http://localhost:8200/detect"
     payload = {
         "plate_number": plate_number
     }
