@@ -1,0 +1,11 @@
+# .gitignore
+**/.env           # Ignore all .env files in subfolders
+.env
+*.env
+
+# Python virtual environments
+**/venv/
+**/.venv/
+**/env/
+venv/
+__pycache__/
