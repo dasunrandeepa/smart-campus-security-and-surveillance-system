@@ -4,6 +4,7 @@ import threading
 from fastapi.middleware.cors import CORSMiddleware
 from rabbitmq_listener import consume_vehicle_authorized, consume_surveillance_alerts
 from supabase_utils import supabase
+from alerts_api import router as alerts_router
 
 app = FastAPI()
 
@@ -15,6 +16,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include alerts router
+app.include_router(alerts_router, prefix="/api")
 
 @app.on_event("startup")
 def startup_event():

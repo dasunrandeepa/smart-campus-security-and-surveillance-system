@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
@@ -8,6 +7,7 @@ import { VehicleAccess } from "@/components/VehicleAccess";
 import { VisitorPreAuth } from "@/components/VisitorPreAuth";
 import { SearchLogs } from "@/components/SearchLogs";
 import { PersonnelSection } from "@/components/PersonnelSection";
+import AuthorizedVehicles from "./AuthorizedVehicles";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("cctv");
@@ -26,6 +26,8 @@ const Index = () => {
         return <SearchLogs />;
       case "personnel":
         return <PersonnelSection />;
+      case "authorized-vehicles":
+        return <AuthorizedVehicles />;
       default:
         return <CctvMonitoring />;
     }

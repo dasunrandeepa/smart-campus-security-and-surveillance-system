@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -12,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Cctv, Car, AlertTriangle, Search, Users, ListCheck } from "lucide-react";
+import { Cctv, Car, AlertTriangle, Search, Users, ListCheck, CarFront } from "lucide-react";
 
 
 type SidebarItem = {
@@ -47,6 +46,12 @@ export function DashboardSidebar({
       label: "Vehicle Access",
       active: activeSection === "vehicle",
       onClick: () => onSectionChange("vehicle"),
+    },
+    {
+      icon: CarFront,
+      label: "Authorized Vehicles",
+      active: activeSection === "authorized-vehicles",
+      onClick: () => onSectionChange("authorized-vehicles"),
     },
     {
       icon: ListCheck,
