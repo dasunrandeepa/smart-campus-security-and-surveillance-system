@@ -9,3 +9,6 @@
 **/env/
 venv/
 __pycache__/
+
+# Snapshots
+**/snapshots/    # Ignore snapshots directories in all subfolders
