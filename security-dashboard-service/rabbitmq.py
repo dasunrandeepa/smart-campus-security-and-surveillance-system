@@ -24,11 +24,11 @@ def send_manual_approval(vehicle):
 
     channel.queue_declare(queue="vehicle.authorization.result", durable=True)
 
-    # Manually approve the vehicle
+    # Use the status and security_clear from the vehicle parameter
     message = {
         "plate_number": vehicle["plate_number"],
-        "status": "manually approved",
-        "security_clear": True,
+        "status": vehicle.get("status", "manually approved"),
+        "security_clear": vehicle.get("security_clear", True),
         "timestamp": vehicle["timestamp"]
     }
 

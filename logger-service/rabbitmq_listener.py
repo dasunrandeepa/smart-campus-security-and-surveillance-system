@@ -12,7 +12,7 @@ def consume_vehicle_authorized():
     def callback(ch, method, properties, body):
         data = json.loads(body)
         print(f"[x] Received vehicle authorization data: {data}")
-        log_vehicle(data["plate_number"], "entered", True)  # TODO: Dynamic
+        log_vehicle(data["plate_number"], data.get("status", "entered"), data.get("security_clear", True))
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     channel.basic_consume(queue="vehicle.authorization.result", on_message_callback=callback)

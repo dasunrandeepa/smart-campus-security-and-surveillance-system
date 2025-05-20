@@ -55,6 +55,17 @@ def approve_vehicle(plate_number: str):
             break
     return RedirectResponse(url="/", status_code=303)
 
+@app.post("/decline/{plate_number}")
+def decline_vehicle(plate_number: str):
+    vehicles = get_all_pending()
+    for vehicle in vehicles:
+        if vehicle["plate_number"] == plate_number:
+            # Send unauthorized_checked status to authorization result queue
+            send_manual_approval({**vehicle, "status": "unauthorized_checked", "security_clear": False})
+            remove_vehicle(plate_number)
+            break
+    return RedirectResponse(url="/", status_code=303)
+
 @app.post("/add-guest-vehicle")
 def add_guest_vehicle(
     plate_number: str = Form(...),

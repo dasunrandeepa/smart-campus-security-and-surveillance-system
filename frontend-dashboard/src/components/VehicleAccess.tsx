@@ -49,10 +49,21 @@ export function VehicleAccess() {
     }
   };
 
-  const handleDecline = (plateNumber: string) => {
-    setVehicles((prev) =>
-      prev.map((v) => (v.plate_number === plateNumber ? { ...v, is_authorized: false } : v))
-    );
+  const handleDecline = async (plateNumber: string) => {
+    try {
+      const response = await fetch(`http://localhost:8004/decline/${plateNumber}`, {
+        method: 'POST',
+        redirect: 'follow'
+      });
+      
+      setVehicles((prev) => prev.filter((v) => v.plate_number !== plateNumber));
+      if (selectedVehicle === plateNumber) {
+        setSelectedVehicle(null);
+      }
+    } catch (err) {
+      console.error('Error declining vehicle:', err);
+      setError('Error declining vehicle. Please try again.');
+    }
   };
 
   if (loading) {
