@@ -20,7 +20,8 @@ def consume_vehicle_detected():
         result = {
             "plate_number": plate_number,
             "is_authorized": is_authorized,
-            "timestamp": message["timestamp"]
+            "timestamp": message["timestamp"],
+            "filename": message["filename"]
         }
 
         if is_authorized:

@@ -8,6 +8,7 @@ interface Vehicle {
   plate_number: string;
   is_authorized: boolean;
   timestamp: string;
+  filename: string;
 }
 
 export function VehicleAccess() {
@@ -17,7 +18,7 @@ export function VehicleAccess() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8203/api/vehicles/pending")
+    fetch("http://localhost:8004/api/vehicles/pending")
       .then((res) => res.json())
       .then((data) => {
         setVehicles(data);
@@ -33,7 +34,7 @@ export function VehicleAccess() {
 
   const handleApprove = async (plateNumber: string) => {
     try {
-      const response = await fetch(`http://localhost:8203/approve/${plateNumber}`, {
+      const response = await fetch(`http://localhost:8004/approve/${plateNumber}`, {
         method: 'POST',
         redirect: 'follow'
       });
@@ -137,8 +138,19 @@ export function VehicleAccess() {
                 <>
                   <div className="aspect-video bg-card rounded-md flex items-center justify-center">
                     <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                      <Car className="h-8 w-8" />
-                      <span>Vehicle Image</span>
+                      {vehicles.find((v) => v.plate_number === selectedVehicle)?.filename ? (
+                        console.log(vehicles.find((v) => v.plate_number === selectedVehicle)?.filename),
+                        <img
+                          src={`http://localhost:8005/snapshot/${vehicles.find((v) => v.plate_number === selectedVehicle)?.filename.split('/').pop()}`}
+                          alt={`Vehicle ${selectedVehicle}`}
+                          className="w-full h-full object-contain rounded-md"
+                        />
+                      ) : (
+                        <>
+                          <Car className="h-16 w-16 opacity-20" />
+                          <p>No image available</p>
+                        </>
+                      )}
                     </div>
                   </div>
 

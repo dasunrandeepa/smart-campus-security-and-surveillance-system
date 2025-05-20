@@ -23,14 +23,14 @@ export function CctvMonitoring() {
     // Poll for new plate numbers every second
     const interval = setInterval(async () => {
       try {
-        const response = await fetch('http://localhost:8204/current_plate');
+        const response = await fetch('http://localhost:8005/current_plate');
         const data = await response.json();
         if (data.plate) {
           setCurrentPlate(data.plate);
           if (data.snapshot) {
             // Extract filename from the full path
             const filename = data.snapshot.split('/').pop();
-            setSnapshot(`http://localhost:8204/snapshot/${filename}`);
+            setSnapshot(`http://localhost:8005/snapshot/${filename}`);
           }
         }
       } catch (error) {
@@ -101,7 +101,7 @@ function CameraFeed({ camera, currentPlate, snapshot }: { camera: any; currentPl
     <div className="relative aspect-video bg-muted rounded-lg overflow-hidden shadow-md">
       {camera.hasPlateDetection ? (
         <img 
-          src="http://localhost:8204/video_feed" 
+          src="http://localhost:8005/video_feed" 
           alt={`${camera.name} feed`} 
           className="w-full h-full object-cover"
         />
@@ -140,7 +140,7 @@ function FeaturedCamera({ camera, currentPlate, snapshot }: { camera: any; curre
     <div className="relative aspect-video bg-muted rounded-lg overflow-hidden shadow-lg">
       {camera.hasPlateDetection ? (
         <img 
-          src="http://localhost:8204/video_feed" 
+          src="http://localhost:8005/video_feed" 
           alt={`${camera.name} feed`} 
           className="w-full h-full object-cover"
         />
