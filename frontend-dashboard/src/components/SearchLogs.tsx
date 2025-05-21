@@ -8,7 +8,7 @@ import { Search, Calendar, Car } from "lucide-react";
 interface VehicleLog {
   id: string;
   plate_number: string;
-  status: 'entered' | 'exited' | 'unauthorized_checked';
+  status: 'entered' | 'exited' | 'unauthorized_checked' | 'manually approved';
   timestamp: string;
   security_clear: boolean;
 }
@@ -133,6 +133,8 @@ export function SearchLogs() {
                           ? "border-security-green text-security-green"
                           : log.status === "exited"
                           ? "border-security-blue text-security-blue"
+                          : log.status === "manually approved"
+                          ? "border-orange-500 text-orange-500"
                           : "border-security-red text-security-red"
                       }`}
                     >

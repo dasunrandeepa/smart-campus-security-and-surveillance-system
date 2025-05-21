@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { Search } from "lucide-react";
 
 interface AuthorizedVehicle {
   plate_number: string;
@@ -28,6 +29,7 @@ const API_BASE_URL = 'http://localhost:8002';
 
 export default function AuthorizedVehicles() {
   const [vehicles, setVehicles] = useState<AuthorizedVehicle[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [newVehicle, setNewVehicle] = useState<AuthorizedVehicle>({
     plate_number: '',
     owner_name: '',
@@ -38,14 +40,22 @@ export default function AuthorizedVehicles() {
     fetchVehicles();
   }, []);
 
-  const fetchVehicles = async () => {
+  const fetchVehicles = async (query?: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/authorized-vehicles`);
+      const url = query 
+        ? `${API_BASE_URL}/api/authorized-vehicles/search?query=${encodeURIComponent(query)}`
+        : `${API_BASE_URL}/api/authorized-vehicles`;
+      const response = await fetch(url);
       const data = await response.json();
       setVehicles(data);
     } catch (error) {
       toast.error('Failed to fetch authorized vehicles');
     }
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchVehicles(searchQuery);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -112,8 +122,24 @@ export default function AuthorizedVehicles() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Authorized Vehicles</CardTitle>
-          <CardDescription>List of all authorized vehicles</CardDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle>Authorized Vehicles</CardTitle>
+              <CardDescription>List of all authorized vehicles</CardDescription>
+            </div>
+            <form onSubmit={handleSearch} className="flex gap-2">
+              <Input
+                placeholder="Search by plate number or owner name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-[300px]"
+              />
+              <Button type="submit" variant="outline">
+                <Search className="h-4 w-4 mr-2" />
+                Search
+              </Button>
+            </form>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>

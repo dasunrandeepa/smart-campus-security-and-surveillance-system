@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Car, Check, X } from "lucide-react";
+import { Car, Check, X, Edit2, Save } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 interface Vehicle {
   plate_number: string;
@@ -16,6 +17,8 @@ export function VehicleAccess() {
   const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [editingPlate, setEditingPlate] = useState<string | null>(null);
+  const [newPlateNumber, setNewPlateNumber] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:8004/api/vehicles/pending")
@@ -49,9 +52,102 @@ export function VehicleAccess() {
     }
   };
 
-  const handleDecline = (plateNumber: string) => {
-    setVehicles((prev) =>
-      prev.map((v) => (v.plate_number === plateNumber ? { ...v, is_authorized: false } : v))
+  const handleDecline = async (plateNumber: string) => {
+    try {
+      const response = await fetch(`http://localhost:8004/decline/${plateNumber}`, {
+        method: 'POST',
+        redirect: 'follow'
+      });
+      
+      setVehicles((prev) => prev.filter((v) => v.plate_number !== plateNumber));
+      if (selectedVehicle === plateNumber) {
+        setSelectedVehicle(null);
+      }
+    } catch (err) {
+      console.error('Error declining vehicle:', err);
+      setError('Error declining vehicle. Please try again.');
+    }
+  };
+
+  const handleEditPlate = (plateNumber: string) => {
+    setEditingPlate(plateNumber);
+    setNewPlateNumber(plateNumber);
+  };
+
+  const handleSavePlate = async (oldPlate: string) => {
+    try {
+      const formData = new FormData();
+      formData.append('new_plate', newPlateNumber);
+
+      const response = await fetch(`http://localhost:8004/update-plate/${oldPlate}`, {
+        method: 'POST',
+        body: formData,
+        redirect: 'follow'
+      });
+
+      // Update local state
+      setVehicles(prev => prev.map(v => 
+        v.plate_number === oldPlate ? { ...v, plate_number: newPlateNumber } : v
+      ));
+      
+      if (selectedVehicle === oldPlate) {
+        setSelectedVehicle(newPlateNumber);
+      }
+      
+      setEditingPlate(null);
+    } catch (err) {
+      console.error('Error updating plate number:', err);
+      setError('Error updating plate number. Please try again.');
+    }
+  };
+
+  const renderDetails = (vehicle: Vehicle | undefined) => {
+    if (!vehicle) return null;
+    return (
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
+          <span className="text-muted-foreground">License Plate</span>
+          {editingPlate === vehicle.plate_number ? (
+            <div className="flex gap-2 items-center">
+              <Input
+                value={newPlateNumber}
+                onChange={(e) => setNewPlateNumber(e.target.value)}
+                className="w-32"
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleSavePlate(vehicle.plate_number)}
+              >
+                <Save className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span>{vehicle.plate_number}</span>
+              {!vehicle.is_authorized && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleEditPlate(vehicle.plate_number)}
+                >
+                  <Edit2 className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">Status</span>
+          <Badge variant="outline" className={getStatusClass(vehicle.is_authorized)}>
+            {vehicle.is_authorized ? "Authorized" : "Pending"}
+          </Badge>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">Time</span>
+          <span>{new Date(vehicle.timestamp).toLocaleString()}</span>
+        </div>
+      </div>
     );
   };
 
@@ -141,7 +237,7 @@ export function VehicleAccess() {
                       {vehicles.find((v) => v.plate_number === selectedVehicle)?.filename ? (
                         console.log(vehicles.find((v) => v.plate_number === selectedVehicle)?.filename),
                         <img
-                          src={`http://localhost:8005/snapshot/${vehicles.find((v) => v.plate_number === selectedVehicle)?.filename.split('/').pop()}`}
+                          src={`http://localhost:8015/snapshot/${vehicles.find((v) => v.plate_number === selectedVehicle)?.filename.split('/').pop()}`}
                           alt={`Vehicle ${selectedVehicle}`}
                           className="w-full h-full object-contain rounded-md"
                         />
@@ -185,28 +281,6 @@ export function VehicleAccess() {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function renderDetails(vehicle: Vehicle | undefined) {
-  if (!vehicle) return null;
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between">
-        <span className="text-muted-foreground">License Plate</span>
-        <span>{vehicle.plate_number}</span>
-      </div>
-      <div className="flex justify-between">
-        <span className="text-muted-foreground">Status</span>
-        <Badge variant="outline" className={getStatusClass(vehicle.is_authorized)}>
-          {vehicle.is_authorized ? "Authorized" : "Pending"}
-        </Badge>
-      </div>
-      <div className="flex justify-between">
-        <span className="text-muted-foreground">Time</span>
-        <span>{new Date(vehicle.timestamp).toLocaleString()}</span>
       </div>
     </div>
   );

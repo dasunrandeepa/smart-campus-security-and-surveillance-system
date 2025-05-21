@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import threading
@@ -56,6 +56,21 @@ async def add_authorized_vehicle(vehicle: AuthorizedVehicle):
         return result.data[0]
     except HTTPException as he:
         raise he
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/authorized-vehicles/search")
+async def search_authorized_vehicles(query: str = Query(None, description="Search by plate number or owner name")):
+    try:
+        if not query:
+            result = supabase.table("authorized_vehicles").select("*").execute()
+            return result.data
+            
+        # Search in both plate_number and owner_name fields
+        result = supabase.table("authorized_vehicles").select("*").or_(
+            f"plate_number.ilike.%{query}%,owner_name.ilike.%{query}%"
+        ).execute()
+        return result.data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
