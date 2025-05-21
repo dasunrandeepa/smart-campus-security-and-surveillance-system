@@ -158,3 +158,20 @@ async def remove_vehicle_from_event(event_id: str, plate_number: str):
         return JSONResponse(content={"message": "Vehicle removed successfully"})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/update-plate/{old_plate}")
+def update_plate_number(old_plate: str, new_plate: str = Form(...)):
+    vehicles = get_all_pending()
+    for vehicle in vehicles:
+        if vehicle["plate_number"] == old_plate:
+            # Create a new vehicle object with updated plate number
+            updated_vehicle = vehicle.copy()
+            updated_vehicle["plate_number"] = new_plate
+            
+            # Remove the old vehicle entry
+            remove_vehicle(old_plate)
+            
+            # Send the updated vehicle data to the logger service
+            send_manual_approval(updated_vehicle)
+            break
+    return RedirectResponse(url="/", status_code=303)
